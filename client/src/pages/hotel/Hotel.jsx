@@ -14,7 +14,7 @@ import { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
-// import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import Reserve from "../../components/reserve/Reserve";
 
 const Hotel = () => {
@@ -26,10 +26,10 @@ const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState();
 
   const { data, loading, error } = useFetch(`/hotels/find/${id}`);
-  //   const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const { dates } = useContext(SearchContext);
+  const { dates, options } = useContext(SearchContext);
   console.log(dates);
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -39,10 +39,10 @@ const Hotel = () => {
     return diffDays;
   }
 
-  //   const days = dayDifference(dates[0].endDate, dates[0].startDate);
+  const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
   const handleOpen = (i) => {
-    // setSlideNumber(i);
+    setSlideNumber(i);
     setOpen(true);
   };
 
@@ -55,15 +55,15 @@ const Hotel = () => {
       newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
 
-    // setSlideNumber(newSlideNumber);
+    setSlideNumber(newSlideNumber);
   };
 
   const handleClick = () => {
-    // if (user) {
-    //   setOpenModal(true);
-    // } else {
-    //   navigate("/login");
-    // }
+    if (user) {
+      setOpenModal(true);
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <div>
@@ -131,14 +131,14 @@ const Hotel = () => {
                 <p className="hotelDesc">{data.desc}</p>
               </div>
               <div className="hotelDetailsPrice">
-                {/* <h1>Perfect for a {days}-night stay!</h1> */}
+                <h1>Perfect for a {days}-night stay!</h1>
                 <span>
                   Located in the real heart of Krakow, this property has an
                   excellent location score of 9.8!
                 </span>
                 <h2>
-                  {/* <b>${days * data.cheapestPrice * options.room}</b> ({days}{" "}
-                  nights) */}
+                  <b>${days * data.cheapestPrice * options.room}</b>({days}{" "}
+                  nights)
                 </h2>
                 <button onClick={handleClick}>Reserve or Book Now!</button>
               </div>
